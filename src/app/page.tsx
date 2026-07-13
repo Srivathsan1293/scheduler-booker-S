@@ -13,7 +13,7 @@ import {
 export const metadata: Metadata = {
   title: "Intelligent Appointment Scheduling & Booking Platform",
   description:
-    "Streamline your appointment booking with our intelligent scheduling platform. Manage availability, automate bookings, and focus on what matters most. Perfect for professionals, consultants, and service providers.",
+    "Streamline your appointment booking with our intelligent scheduling platform. Manage availability, automate bookings, and focus on what matters most our Kainkaryam.",
   keywords: [
     "appointment scheduling",
     "online booking",
@@ -32,7 +32,7 @@ export const metadata: Metadata = {
     title:
       "Digvijaya Yatra Booker - Intelligent Appointment Scheduling & Booking Platform",
     description:
-      "Streamline your appointment booking with our intelligent scheduling platform. Manage availability, automate bookings, and focus on what matters most.",
+      "Streamline your appointment booking with our intelligent scheduling platform. Manage availability, automate bookings, and focus on what matters most our Kainkaryam.",
     url: "https://scheduler-booker.vercel.app",
     images: [
       {
@@ -48,7 +48,7 @@ export const metadata: Metadata = {
     title:
       "Digvijaya Yatra Booker - Intelligent Appointment Scheduling & Booking Platform",
     description:
-      "Streamline your appointment booking with our intelligent scheduling platform. Manage availability, automate bookings, and focus on what matters most.",
+      "Streamline your appointment booking with our intelligent scheduling platform. Manage availability, automate bookings, and focus on what matters most our Kainkaryam.",
     images: ["/og-image.png"],
   },
   alternates: {
@@ -95,7 +95,7 @@ export default async function Home() {
       <div className="px-6 py-16 sm:py-20">
         <div className="max-w-7xl mx-auto text-center">
           <h1 className="text-4xl sm:text-5xl md:text-6xl font-bold text-gray-900 mb-6 leading-tight">
-            Simplify Your
+            Udayavar DigVijaya Yatra
             <span className="bg-gradient-to-r from-blue-600 to-indigo-600 bg-clip-text text-transparent">
               {" "}
               Scheduling
@@ -104,7 +104,7 @@ export default async function Home() {
           <p className="text-lg sm:text-xl text-gray-600 mb-8 max-w-3xl mx-auto px-4">
             Streamline your appointment booking with our intelligent scheduling
             platform. Manage availability, automate bookings, and focus on what
-            matters most.
+            matters most our Kainkaryam.
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center max-w-md mx-auto sm:max-w-none">
             <Link

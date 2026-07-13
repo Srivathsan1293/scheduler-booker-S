@@ -24,7 +24,7 @@ export const metadata: Metadata = {
     template: "%s | Digvijaya Yatra Booker",
   },
   description:
-    "Streamline your appointment booking with our intelligent scheduling platform. Manage availability, automate bookings, and focus on what matters most. Perfect for professionals, consultants, and service providers.",
+    "Streamline your appointment booking with our intelligent scheduling platform. Manage availability, automate bookings, and focus on what matters most our Kainkaryam.",
   keywords: [
     "appointment scheduling",
     "online booking",
@@ -57,7 +57,7 @@ export const metadata: Metadata = {
     title:
       "Digvijaya Yatra Booker - Intelligent Appointment Scheduling & Booking Platform",
     description:
-      "Streamline your appointment booking with our intelligent scheduling platform. Manage availability, automate bookings, and focus on what matters most.",
+      "Streamline your appointment booking with our intelligent scheduling platform. Manage availability, automate bookings, and focus on what matters most our Kainkaryam.",
     images: [
       {
         url: "/og-image.png",
@@ -72,7 +72,7 @@ export const metadata: Metadata = {
     title:
       "Digvijaya Yatra Booker - Intelligent Appointment Scheduling & Booking Platform",
     description:
-      "Streamline your appointment booking with our intelligent scheduling platform. Manage availability, automate bookings, and focus on what matters most.",
+      "Streamline your appointment booking with our intelligent scheduling platform. Manage availability, automate bookings, and focus on what matters most our Kainkaryam.",
     images: ["/og-image.png"],
     creator: "@schedulerbooker",
     site: "@schedulerbooker",
