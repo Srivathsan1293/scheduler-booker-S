@@ -108,17 +108,11 @@ export default async function Home() {
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center max-w-md mx-auto sm:max-w-none">
             <Link
-              href="/signup"
+              href="/login"
               className="inline-flex items-center justify-center px-8 py-4 sm:py-3 bg-gradient-to-r from-blue-600 to-indigo-600 text-white text-base sm:text-lg font-semibold rounded-xl hover:from-blue-700 hover:to-indigo-700 transition-all duration-200 transform hover:-translate-y-1 shadow-lg hover:shadow-xl active:scale-95"
             >
-              Get Started
-              <ArrowRightIcon className="w-5 h-5 ml-2" />
-            </Link>
-            <Link
-              href="/login"
-              className="inline-flex items-center justify-center px-8 py-4 sm:py-3 border-2 border-gray-300 text-gray-700 text-base sm:text-lg font-semibold rounded-xl hover:border-gray-400 hover:bg-gray-50 transition-all duration-200 active:scale-95"
-            >
               Sign In
+              <ArrowRightIcon className="w-5 h-5 ml-2" />
             </Link>
           </div>
         </div>
@@ -136,7 +130,7 @@ export default async function Home() {
             </span>
           </div>
           <p className="text-sm mb-4">
-            © {new Date().getFullYear()} Digvijaya Yatra Booker. All rights reserved.
+            © {new Date().getFullYear()} Virat UK. All rights reserved.
           </p>
           <div className="flex justify-center space-x-6 text-sm">
             <a href="/privacy" className="hover:text-white transition-colors">

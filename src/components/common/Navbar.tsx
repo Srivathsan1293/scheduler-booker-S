@@ -75,12 +75,6 @@ export default function Navbar({ isAuthed }: NavbarProps) {
                   >
                     Sign In
                   </Link>
-                  <Link
-                    href="/signup"
-                    className="bg-blue-600 text-white px-3 sm:px-4 py-2 rounded-lg hover:bg-blue-700 transition-colors font-medium shadow-sm text-sm sm:text-base whitespace-nowrap"
-                  >
-                    Get Started
-                  </Link>
                 </>
               )
             )}

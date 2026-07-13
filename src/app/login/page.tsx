@@ -62,19 +62,6 @@ export default function LoginPage() {
         <div className="bg-white/80 backdrop-blur-sm rounded-3xl shadow-xl border border-white/20 p-8">
           <LoginForm />
         </div>
-
-        {/* Footer */}
-        <div className="text-center mt-8">
-          <p className="text-gray-600">
-            Don&apos;t have an account?{" "}
-            <a
-              href="/signup"
-              className="text-blue-600 hover:text-blue-500 font-semibold transition-colors"
-            >
-              Sign up
-            </a>
-          </p>
-        </div>
       </div>
     </div>
   );
