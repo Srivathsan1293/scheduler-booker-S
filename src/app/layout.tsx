@@ -3,7 +3,6 @@ import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import Navbar from "@/components/common/Navbar";
 import { SnackbarProvider } from "@/components/snackbar";
-import { Analytics } from "@vercel/analytics/next";
 import { createSupabaseServerClient } from "@/lib/supabase-server";
 import QueryProvider from "@/lib/providers/QueryProvider";
 
@@ -187,7 +186,6 @@ export default async function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
-        <Analytics />
         <QueryProvider>
           <SnackbarProvider>
             <Navbar isAuthed={isAuthed} />
