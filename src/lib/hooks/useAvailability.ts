@@ -2,6 +2,7 @@ import { useState, useCallback, useEffect, useMemo } from "react";
 import { useAvailabilityData } from "./useAvailabilityData";
 import { useAvailabilityActions } from "./useAvailabilityActions";
 import { TimeSlotUtils } from "../utils/timeSlotUtils";
+import { ClientAvailabilityService } from "../services/clientAvailabilityService";
 import type {
   DayAvailability,
   WorkingHours,
@@ -110,11 +111,53 @@ export function useAvailability() {
 
   // Utility functions
   const saveAvailability = useCallback(async () => {
-    console.warn(
-      "saveAvailability is deprecated. Data is managed by ClientAvailabilityService."
-    );
-    return { success: true, message: "Data saved successfully (no-op)" };
-  }, []);
+    if (settings.slotDuration === 0 || workingHours.length === 0) {
+      return {
+        success: false,
+        message: "Availability settings are not loaded yet.",
+      };
+    }
+
+    const dayOfWeekMap: Record<string, number> = {
+      sunday: 0,
+      monday: 1,
+      tuesday: 2,
+      wednesday: 3,
+      thursday: 4,
+      friday: 5,
+      saturday: 6,
+    };
+
+    try {
+      await Promise.all([
+        ClientAvailabilityService.saveSettings({
+          slot_duration_minutes: settings.slotDuration,
+          advance_booking_days: settings.advanceBookingDays,
+        }),
+        ClientAvailabilityService.saveWorkingHours(
+          workingHours.map((hour) => ({
+            day_of_week: dayOfWeekMap[hour.day.toLowerCase()],
+            start_time: hour.startTime,
+            end_time: hour.endTime,
+            is_working: hour.isWorking,
+          }))
+        ),
+      ]);
+
+      await loadAvailability();
+
+      return { success: true, message: "Settings saved successfully." };
+    } catch (error) {
+      console.error("Failed to save availability:", error);
+      return {
+        success: false,
+        message:
+          error instanceof Error
+            ? error.message
+            : "Failed to save availability settings.",
+      };
+    }
+  }, [loadAvailability, settings, workingHours]);
 
   const updateWorkingHours = useCallback(
     (index: number, field: keyof WorkingHours, value: string | boolean) => {

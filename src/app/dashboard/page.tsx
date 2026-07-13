@@ -15,7 +15,7 @@ import Breadcrumbs from "@/components/ui/Breadcrumbs";
 export const metadata: Metadata = {
   title: "Dashboard - Manage Your Appointments & Availability",
   description:
-    "Access your Scheduler Booker dashboard to manage appointments, set availability, and streamline your professional scheduling. Everything you need in one place.",
+    "Access your Digvijaya Yatra Booker dashboard to manage appointments, set availability, and streamline your professional scheduling. Everything you need in one place.",
   keywords: [
     "scheduling dashboard",
     "appointment management",
@@ -30,9 +30,9 @@ export const metadata: Metadata = {
     follow: false,
   },
   openGraph: {
-    title: "Dashboard - Scheduler Booker",
+    title: "Dashboard - Digvijaya Yatra Booker",
     description:
-      "Access your Scheduler Booker dashboard to manage appointments, set availability, and streamline your professional scheduling.",
+      "Access your Digvijaya Yatra Booker dashboard to manage appointments, set availability, and streamline your professional scheduling.",
     url: "https://scheduler-booker.vercel.app/dashboard",
   },
   alternates: {

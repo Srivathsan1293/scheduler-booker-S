@@ -1,4 +1,4 @@
-# 🗓️ Scheduler Booker
+# 🗓️ Digvijaya Yatra Booker
 
 A modern, full-stack scheduling application built with Next.js 15, Supabase, and TypeScript. Perfect for businesses and individuals who need to manage appointments and availability with enterprise-grade reliability.
 

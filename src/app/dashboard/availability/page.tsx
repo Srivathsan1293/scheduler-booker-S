@@ -23,7 +23,7 @@ export const metadata: Metadata = {
     follow: false,
   },
   openGraph: {
-    title: "Manage Availability - Scheduler Booker",
+    title: "Manage Availability - Digvijaya Yatra Booker",
     description:
       "Configure your working hours, set availability, and manage time slots for client bookings. Customize your schedule to match your business needs.",
     url: "https://scheduler-booker.vercel.app/dashboard/availability",

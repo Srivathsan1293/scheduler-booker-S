@@ -2,14 +2,20 @@
 
 import { XMarkIcon } from "@heroicons/react/24/outline";
 import { Dialog, DialogPanel } from "@headlessui/react";
-import AvailabilitySettings from "./AvailabilitySettings";
+import AvailabilitySettings, {
+  type AvailabilitySettingsProps,
+} from "./AvailabilitySettings";
 
-interface SettingsModalProps {
+interface SettingsModalProps extends AvailabilitySettingsProps {
   isOpen: boolean;
   onClose: () => void;
 }
 
-export default function SettingsModal({ isOpen, onClose }: SettingsModalProps) {
+export default function SettingsModal({
+  isOpen,
+  onClose,
+  ...availabilitySettingsProps
+}: SettingsModalProps) {
   return (
     <Dialog open={isOpen} onClose={onClose} className="relative z-50">
       {/* Backdrop */}
@@ -33,7 +39,7 @@ export default function SettingsModal({ isOpen, onClose }: SettingsModalProps) {
 
           {/* Content - Mobile responsive padding with scroll */}
           <div className="flex-1 overflow-y-auto p-3 sm:p-6">
-            <AvailabilitySettings />
+            <AvailabilitySettings {...availabilitySettingsProps} />
           </div>
 
           {/* Footer - Mobile responsive */}

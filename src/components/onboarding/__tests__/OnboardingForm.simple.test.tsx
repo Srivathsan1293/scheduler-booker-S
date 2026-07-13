@@ -13,7 +13,7 @@ describe("OnboardingForm", () => {
     render(<OnboardingForm />);
 
     expect(
-      screen.getByText("Welcome to Scheduler Booker!")
+      screen.getByText("Welcome to Digvijaya Yatra Booker!")
     ).toBeInTheDocument();
     expect(
       screen.getByText(
@@ -83,5 +83,43 @@ describe("OnboardingForm", () => {
     await waitFor(() => {
       expect(screen.getByText("Set Your Availability")).toBeInTheDocument();
     });
+  });
+
+  it("shows 4-hour and 8-hour slot duration options on step 2", async () => {
+    const user = userEvent.setup();
+    render(<OnboardingForm />);
+
+    await user.click(screen.getByText("🏢 Business").closest("button")!);
+    await user.type(
+      screen.getByLabelText(/business name/i),
+      TEST_ONBOARDING_DATA.businessName!
+    );
+    await user.selectOptions(
+      screen.getByLabelText(/business type/i),
+      TEST_ONBOARDING_DATA.businessType!
+    );
+    await user.type(screen.getByLabelText(/your name/i), TEST_ONBOARDING_DATA.name);
+    await user.selectOptions(
+      screen.getByLabelText(/timezone/i),
+      TEST_ONBOARDING_DATA.timezone
+    );
+
+    await user.click(
+      screen.getByRole("button", {
+        name: /continue to availability setup/i,
+      })
+    );
+
+    expect(await screen.findByText("Set Your Availability")).toBeInTheDocument();
+    expect(
+      screen.getByRole("option", { name: "4 hours" })
+    ).toBeInTheDocument();
+    expect(
+      screen.getByRole("option", { name: "8 hours" })
+    ).toBeInTheDocument();
+    expect(
+      screen.queryByRole("option", { name: "1 hour" })
+    ).not.toBeInTheDocument();
+    expect(screen.getByLabelText(/appointment duration/i)).toHaveValue("240");
   });
 });

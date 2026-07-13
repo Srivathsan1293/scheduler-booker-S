@@ -3,7 +3,7 @@ import type { Metadata } from "next";
 export const metadata: Metadata = {
   title: "Privacy Policy",
   description:
-    "Privacy Policy for Scheduler Booker - How we collect, use, and protect your data",
+    "Privacy Policy for Digvijaya Yatra Booker - How we collect, use, and protect your data",
 };
 
 export default function PrivacyPage() {
@@ -25,7 +25,7 @@ export default function PrivacyPage() {
                 1. Introduction
               </h2>
               <p className="text-gray-700 mb-4">
-                Scheduler Booker (&quot;we,&quot; &quot;our,&quot; or
+                Digvijaya Yatra Booker (&quot;we,&quot; &quot;our,&quot; or
                 &quot;us&quot;) is committed to protecting your privacy. This
                 Privacy Policy explains how we collect, use, disclose, and
                 safeguard your information when you use our scheduling and

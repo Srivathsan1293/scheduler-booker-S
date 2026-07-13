@@ -1,11 +1,12 @@
 "use client";
 
-import { useEffect, useState, useCallback } from "react";
+import { useEffect, useState, useCallback, useRef } from "react";
 import { format } from "date-fns";
 import { XMarkIcon } from "@heroicons/react/24/outline";
 import { Dialog, DialogPanel } from "@headlessui/react";
 import { useDayDetails } from "@/lib/hooks/queries";
 import { useQueryClient } from "@tanstack/react-query";
+import { TimeSlotUtils } from "@/lib/utils/timeSlotUtils";
 
 import type {
   DayAvailability,
@@ -42,6 +43,8 @@ export default function DayDetailsModal({
   toggleWorkingDay,
   onCalendarRefresh,
 }: DayDetailsModalProps) {
+  const isMountedRef = useRef(false);
+  const isOpenRef = useRef(isOpen);
   const [bookingDetails, setBookingDetails] = useState<
     Record<
       string,
@@ -61,6 +64,18 @@ export default function DayDetailsModal({
   const { data: dayDetailsData, isLoading: isLoadingBookingDetails } =
     useDayDetails(dateString);
   const queryClient = useQueryClient();
+
+  useEffect(() => {
+    isMountedRef.current = true;
+
+    return () => {
+      isMountedRef.current = false;
+    };
+  }, []);
+
+  useEffect(() => {
+    isOpenRef.current = isOpen;
+  }, [isOpen]);
 
   // Function to refresh the modal data using TanStack Query
   const refreshModalData = useCallback(async () => {
@@ -146,8 +161,7 @@ export default function DayDetailsModal({
   // Early return if modal is not open or no date selected
   if (!isOpen || !selectedDate) return null;
 
-  const dateKeyLocal = format(selectedDate, "yyyy-MM-dd");
-  const dateKeyIso = selectedDate.toISOString().split("T")[0];
+  const dateKey = TimeSlotUtils.formatDateKey(selectedDate);
 
   // Get the default working day status from working hours
   const dayOfWeek = selectedDate.getDay();
@@ -155,8 +169,7 @@ export default function DayDetailsModal({
   const dayHours = workingHours[dayIndex];
   const defaultIsWorking = dayHours?.isWorking ?? false;
 
-  const dayAvailability = availability[dateKeyLocal] ||
-    availability[dateKeyIso] || {
+  const dayAvailability = availability[dateKey] || {
       date: selectedDate,
       timeSlots: [],
       isWorkingDay: defaultIsWorking,
@@ -293,11 +306,16 @@ export default function DayDetailsModal({
                                     }
                                   } finally {
                                     // Remove from loading state
-                                    setLoadingSlots((prev) => {
-                                      const newSet = new Set(prev);
-                                      newSet.delete(slot.id);
-                                      return newSet;
-                                    });
+                                    if (
+                                      isMountedRef.current &&
+                                      isOpenRef.current
+                                    ) {
+                                      setLoadingSlots((prev) => {
+                                        const newSet = new Set(prev);
+                                        newSet.delete(slot.id);
+                                        return newSet;
+                                      });
+                                    }
                                   }
                                 }}
                                 className={`relative w-full px-3 py-2 sm:py-3 text-sm rounded-md border transition-colors flex items-center justify-center gap-2 ${

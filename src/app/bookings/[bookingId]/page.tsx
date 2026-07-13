@@ -28,7 +28,7 @@ export const metadata: Metadata = {
     follow: false,
   },
   openGraph: {
-    title: "Booking Details - Scheduler Booker",
+    title: "Booking Details - Digvijaya Yatra Booker",
     description:
       "View detailed information about your appointment booking including client details, time slots, and notes.",
     url: "https://scheduler-booker.vercel.app/bookings",

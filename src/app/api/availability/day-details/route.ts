@@ -25,6 +25,12 @@ type ApiTimeSlot = {
   bookingDetails?: BookingDetails;
 };
 
+function getSlotDurationMinutes(startTime: string, endTime: string) {
+  const [startHour, startMinute] = startTime.split(":").map(Number);
+  const [endHour, endMinute] = endTime.split(":").map(Number);
+  return endHour * 60 + endMinute - (startHour * 60 + startMinute);
+}
+
 // This endpoint is for authenticated users to fetch their own availability
 // details, including private booking information.
 export async function GET(request: NextRequest) {
@@ -126,6 +132,14 @@ export async function GET(request: NextRequest) {
       .eq("date", date)
       .order("start_time");
 
+    const { data: settings } = await supabase
+      .from("user_availability_settings")
+      .select("slot_duration_minutes")
+      .eq("user_id", userId)
+      .single();
+
+    const slotDuration = settings?.slot_duration_minutes === 480 ? 480 : 240;
+
     console.log(
       "🔥 CUSTOM TIME SLOTS FETCHED:",
       customTimeSlots?.length || 0,
@@ -150,25 +164,31 @@ export async function GET(request: NextRequest) {
           "🔥 Using custom slots for non-working day or missing working hours"
         );
 
-        const customOnly: ApiTimeSlot[] = customTimeSlots.map((customSlot) => {
-          const startTime = extractTimeFromTimestamp(customSlot.start_time);
-          const endTime = extractTimeFromTimestamp(customSlot.end_time);
-          const slot: ApiTimeSlot = {
-            id: `${userId}-${date}-${startTime}-${endTime}`,
-            startTime,
-            endTime,
-            isAvailable: customSlot.is_available,
-            isBooked: customSlot.is_booked || false,
-          };
+        const customOnly: ApiTimeSlot[] = customTimeSlots
+          .map((customSlot) => {
+            const startTime = extractTimeFromTimestamp(customSlot.start_time);
+            const endTime = extractTimeFromTimestamp(customSlot.end_time);
 
-          // Add display formatting if user prefers 12-hour format
-          if (shouldUse12HourFormat) {
-            slot.startTimeDisplay = formatTime(startTime, false); // false = 12-hour format
-            slot.endTimeDisplay = formatTime(endTime, false);
-          }
+            if (getSlotDurationMinutes(startTime, endTime) !== slotDuration) {
+              return null;
+            }
 
-          return slot;
-        });
+            const slot: ApiTimeSlot = {
+              id: `${userId}-${date}-${startTime}-${endTime}`,
+              startTime,
+              endTime,
+              isAvailable: customSlot.is_available,
+              isBooked: customSlot.is_booked || false,
+            };
+
+            if (shouldUse12HourFormat) {
+              slot.startTimeDisplay = formatTime(startTime, false);
+              slot.endTimeDisplay = formatTime(endTime, false);
+            }
+
+            return slot;
+          })
+          .filter((slot): slot is ApiTimeSlot => slot !== null);
 
         // Merge booking info
         const { data: existingBookings } = await supabase
@@ -237,15 +257,6 @@ export async function GET(request: NextRequest) {
         },
       });
     }
-
-    // Generate time slots from working hours
-    const { data: settings } = await supabase
-      .from("user_availability_settings")
-      .select("slot_duration_minutes")
-      .eq("user_id", userId)
-      .single();
-
-    const slotDuration = settings?.slot_duration_minutes || 60;
 
     console.log("🔥 Slot duration settings:", {
       settings,
@@ -325,6 +336,15 @@ export async function GET(request: NextRequest) {
       customTimeSlots.forEach((customSlot) => {
         const startTime = extractTimeFromTimestamp(customSlot.start_time);
         const endTime = extractTimeFromTimestamp(customSlot.end_time);
+
+        if (getSlotDurationMinutes(startTime, endTime) !== slotDuration) {
+          console.log("🔥 Skipping legacy custom slot due to duration mismatch:", {
+            startTime,
+            endTime,
+            slotDuration,
+          });
+          return;
+        }
 
         console.log("🔥 Processing custom slot:", {
           originalStart: customSlot.start_time,

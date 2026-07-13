@@ -47,6 +47,13 @@ export async function POST(request: NextRequest) {
       );
     }
 
+    if (![240, 480].includes(timeSlotDuration)) {
+      return NextResponse.json(
+        { error: "Invalid time slot duration" },
+        { status: 400 }
+      );
+    }
+
     // Start a transaction-like approach by saving availability settings first
     const { error: settingsError } = await supabase
       .from("user_availability_settings")

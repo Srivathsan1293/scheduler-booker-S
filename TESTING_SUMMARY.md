@@ -1,4 +1,4 @@
-# 🧪 Testing Summary - Scheduler Booker
+# 🧪 Testing Summary - Digvijaya Yatra Booker
 
 ## ✅ **What's Working**
 

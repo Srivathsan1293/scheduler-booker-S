@@ -54,7 +54,7 @@ export default async function PublicBookingPage({
                 yet. Please check back later or contact them directly.
               </p>
               <div className="text-sm text-gray-500">
-                <p>Powered by Scheduler Booker</p>
+                <p>Powered by Digvijaya Yatra Booker</p>
               </div>
             </div>
           )}

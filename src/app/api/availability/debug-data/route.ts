@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 import { createSupabaseServerClient } from "@/lib/supabase-server";
+import { TimeSlotUtils } from "@/lib/utils/timeSlotUtils";
 
 export async function GET() {
   try {
@@ -30,8 +31,8 @@ export async function GET() {
       0
     );
 
-    const startDateKey = monthStart.toISOString().split("T")[0];
-    const endDateKey = monthEnd.toISOString().split("T")[0];
+    const startDateKey = TimeSlotUtils.formatDateKey(monthStart);
+    const endDateKey = TimeSlotUtils.formatDateKey(monthEnd);
 
     console.log("🔍 Date range:", { startDateKey, endDateKey });
 

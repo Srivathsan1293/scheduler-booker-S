@@ -30,7 +30,7 @@ export default function Navbar({ isAuthed }: NavbarProps) {
                 <CalendarDaysIcon className="w-5 h-5 text-white" />
               </div>
               <span className="text-lg sm:text-xl font-bold text-gray-900 whitespace-nowrap">
-                Scheduler Booker
+                Digvijaya Yatra Booker
               </span>
             </Link>
             {!isAuthRoute && isAuthed && (

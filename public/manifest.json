@@ -1,7 +1,7 @@
 {
-  "name": "Scheduler Booker - Intelligent Appointment Scheduling",
-  "short_name": "Scheduler Booker",
-  "description": "Streamline your appointment booking with our intelligent scheduling platform. Manage availability, automate bookings, and focus on what matters most.",
+  "name": "Digvijaya Yatra Booker - Appointment Scheduling",
+  "short_name": "Digvijaya Yatra Booker",
+  "description": "Streamline your appointment booking with our scheduling platform. Manage availability, automate bookings, and focus on what matters most.",
   "start_url": "/",
   "display": "standalone",
   "background_color": "#ffffff",

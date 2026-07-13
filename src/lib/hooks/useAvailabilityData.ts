@@ -21,6 +21,12 @@ type UserWorkingHourWithDisplay = UserWorkingHour & {
   end_time_display?: string;
 };
 
+const getSlotDurationMinutes = (startTime: string, endTime: string) => {
+  const [startHour, startMinute] = startTime.split(":").map(Number);
+  const [endHour, endMinute] = endTime.split(":").map(Number);
+  return endHour * 60 + endMinute - (startHour * 60 + startMinute);
+};
+
 interface UseAvailabilityDataProps {
   setWorkingHours: (hours: WorkingHours[]) => void;
   setSettings: (settings: AvailabilitySettings) => void;
@@ -37,6 +43,10 @@ interface UseAvailabilityDataProps {
   workingHours: WorkingHours[];
   settings: AvailabilitySettings;
 }
+
+const normalizeSlotDuration = (slotDuration?: number) => {
+  return slotDuration === 480 ? 480 : 240;
+};
 
 export function useAvailabilityData({
   setWorkingHours,
@@ -115,7 +125,9 @@ export function useAvailabilityData({
       if (settingsData && settingsData.length > 0) {
         // Convert settings to the expected format
         const convertedSettings = {
-          slotDuration: settingsData[0].slot_duration_minutes,
+          slotDuration: normalizeSlotDuration(
+            settingsData[0].slot_duration_minutes
+          ),
           advanceBookingDays: settingsData[0].advance_booking_days,
           timeFormat12h: settingsData[0].time_format_12h || false,
         };
@@ -129,7 +141,9 @@ export function useAvailabilityData({
         const defaultSettings = await ClientAvailabilityService.loadSettings();
         if (defaultSettings && defaultSettings.length > 0) {
           const convertedSettings = {
-            slotDuration: defaultSettings[0].slot_duration_minutes,
+            slotDuration: normalizeSlotDuration(
+              defaultSettings[0].slot_duration_minutes
+            ),
             advanceBookingDays: defaultSettings[0].advance_booking_days,
             timeFormat12h: defaultSettings[0].time_format_12h || false,
           };
@@ -246,6 +260,12 @@ export function useAvailabilityData({
               isAvailable: slot.is_available,
               isBooked: slot.is_booked,
             };
+
+            if (
+              getSlotDurationMinutes(startTime, endTime) !== settings.slotDuration
+            ) {
+              return;
+            }
 
             // Apply time formatting if user prefers 12-hour format
             if (settings.timeFormat12h) {

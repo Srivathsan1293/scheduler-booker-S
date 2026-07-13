@@ -1,4 +1,4 @@
-# Testing Setup for Scheduler Booker
+# Testing Setup for Digvijaya Yatra Booker
 
 ## 🧪 **Test Coverage**
 

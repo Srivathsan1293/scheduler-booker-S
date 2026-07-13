@@ -20,8 +20,8 @@ const geistMono = Geist_Mono({
 export const metadata: Metadata = {
   title: {
     default:
-      "Scheduler Booker - Intelligent Appointment Scheduling & Booking Platform",
-    template: "%s | Scheduler Booker",
+      "Digvijaya Yatra Booker - Intelligent Appointment Scheduling & Booking Platform",
+    template: "%s | Digvijaya Yatra Booker",
   },
   description:
     "Streamline your appointment booking with our intelligent scheduling platform. Manage availability, automate bookings, and focus on what matters most. Perfect for professionals, consultants, and service providers.",
@@ -37,9 +37,9 @@ export const metadata: Metadata = {
     "automated scheduling",
     "client booking system",
   ],
-  authors: [{ name: "Scheduler Booker Team" }],
-  creator: "Scheduler Booker",
-  publisher: "Scheduler Booker",
+  authors: [{ name: "Digvijaya Yatra Booker Team" }],
+  creator: "Digvijaya Yatra Booker",
+  publisher: "Digvijaya Yatra Booker",
   formatDetection: {
     email: false,
     address: false,
@@ -53,9 +53,9 @@ export const metadata: Metadata = {
     type: "website",
     locale: "en_US",
     url: "https://scheduler-booker.vercel.app",
-    siteName: "Scheduler Booker",
+    siteName: "Digvijaya Yatra Booker",
     title:
-      "Scheduler Booker - Intelligent Appointment Scheduling & Booking Platform",
+      "Digvijaya Yatra Booker - Intelligent Appointment Scheduling & Booking Platform",
     description:
       "Streamline your appointment booking with our intelligent scheduling platform. Manage availability, automate bookings, and focus on what matters most.",
     images: [
@@ -63,14 +63,14 @@ export const metadata: Metadata = {
         url: "/og-image.png",
         width: 1200,
         height: 630,
-        alt: "Scheduler Booker - Professional Appointment Scheduling Platform",
+        alt: "Digvijaya Yatra Booker - Professional Appointment Scheduling Platform",
       },
     ],
   },
   twitter: {
     card: "summary_large_image",
     title:
-      "Scheduler Booker - Intelligent Appointment Scheduling & Booking Platform",
+      "Digvijaya Yatra Booker - Intelligent Appointment Scheduling & Booking Platform",
     description:
       "Streamline your appointment booking with our intelligent scheduling platform. Manage availability, automate bookings, and focus on what matters most.",
     images: ["/og-image.png"],
@@ -128,8 +128,8 @@ export default async function RootLayout({
         <meta name="theme-color" content="#2563eb" />
         <meta name="apple-mobile-web-app-capable" content="yes" />
         <meta name="apple-mobile-web-app-status-bar-style" content="default" />
-        <meta name="apple-mobile-web-app-title" content="Scheduler Booker" />
-        <meta name="application-name" content="Scheduler Booker" />
+        <meta name="apple-mobile-web-app-title" content="Digvijaya Yatra Booker" />
+        <meta name="application-name" content="Digvijaya Yatra Booker" />
         <meta name="msapplication-TileColor" content="#2563eb" />
         <meta name="msapplication-config" content="/browserconfig.xml" />
 
@@ -165,10 +165,10 @@ export default async function RootLayout({
             __html: JSON.stringify({
               "@context": "https://schema.org",
               "@type": "SoftwareApplication",
-              name: "Scheduler Booker",
+              name: "Digvijaya Yatra Booker",
               description:
                 "Intelligent appointment scheduling and booking platform for professionals",
-              url: "https://scheduler-booker.vercel.app",
+              url: "",
               applicationCategory: "BusinessApplication",
               operatingSystem: "Web",
               offers: {
@@ -178,7 +178,7 @@ export default async function RootLayout({
               },
               author: {
                 "@type": "Organization",
-                name: "Scheduler Booker Team",
+                name: "Digvijaya Yatra Booker Team",
               },
             }),
           }}

@@ -35,7 +35,6 @@ export interface UserAvailabilitySettings {
   id?: string;
   user_id: string;
   slot_duration_minutes: number;
-  break_duration_minutes: number;
   advance_booking_days: number;
 }
 
@@ -53,8 +52,7 @@ export class ClientAvailabilityService {
   static async createDefaultSettings() {
     try {
       const defaultSettings = {
-        slot_duration_minutes: 60,
-        break_duration_minutes: 60,
+        slot_duration_minutes: 240,
         advance_booking_days: 30,
       };
 

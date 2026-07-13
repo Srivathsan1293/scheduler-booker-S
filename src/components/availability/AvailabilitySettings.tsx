@@ -1,20 +1,35 @@
 "use client";
 
 import { useState } from "react";
-import { useAvailability } from "@/lib/hooks/useAvailability";
+import type {
+  AvailabilitySettings as AvailabilitySettingsType,
+  WorkingHours,
+} from "@/lib/types/availability";
 import TimePicker from "./TimePicker";
 import TimeFormatToggle from "../settings/TimeFormatToggle";
 import { useTimeFormatPreference } from "@/lib/utils/clientTimeFormat";
 
-export default function AvailabilitySettings() {
-  const {
-    workingHours,
-    settings,
-    updateWorkingHours,
-    updateSettings,
-    saveAvailability,
-    isLoading,
-  } = useAvailability();
+export interface AvailabilitySettingsProps {
+  workingHours: WorkingHours[];
+  settings: AvailabilitySettingsType;
+  updateWorkingHours: (
+    index: number,
+    field: keyof WorkingHours,
+    value: string | boolean
+  ) => void;
+  updateSettings: (updates: Partial<AvailabilitySettingsType>) => void;
+  saveAvailability: () => Promise<{ success: boolean; message?: string }>;
+  isLoading: boolean;
+}
+
+export default function AvailabilitySettings({
+  workingHours,
+  settings,
+  updateWorkingHours,
+  updateSettings,
+  saveAvailability,
+  isLoading,
+}: AvailabilitySettingsProps) {
 
   // Get the current time format preference directly
   const { is24Hour } = useTimeFormatPreference();
@@ -24,6 +39,10 @@ export default function AvailabilitySettings() {
     type: "success" | "error";
     text: string;
   } | null>(null);
+  const selectedSlotDuration =
+    settings.slotDuration === 240 || settings.slotDuration === 480
+      ? settings.slotDuration
+      : 240;
 
   const toggleWorkingDay = (index: number) => {
     updateWorkingHours(index, "isWorking", !workingHours[index].isWorking);
@@ -182,7 +201,7 @@ export default function AvailabilitySettings() {
               Slot Duration
             </label>
             <select
-              value={settings.slotDuration}
+              value={selectedSlotDuration}
               onChange={(e) =>
                 updateSettings({ slotDuration: Number(e.target.value) })
               }
@@ -191,12 +210,8 @@ export default function AvailabilitySettings() {
                 isLoading ? "opacity-50 cursor-not-allowed" : ""
               }`}
             >
-              <option value={15}>15 minutes</option>
-              <option value={30}>30 minutes</option>
-              <option value={45}>45 minutes</option>
-              <option value={60}>1 hour</option>
-              <option value={90}>1.5 hours</option>
-              <option value={120}>2 hours</option>
+              <option value={240}>4 hours</option>
+              <option value={480}>8 hours</option>
             </select>
           </div>
         </div>

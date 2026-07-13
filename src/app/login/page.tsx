@@ -4,7 +4,7 @@ import LoginForm from "@/components/auth/LoginForm";
 export const metadata: Metadata = {
   title: "Sign In - Access Your Scheduling Dashboard",
   description:
-    "Sign in to your Scheduler Booker account to manage your appointments, availability, and client bookings. Secure authentication for professionals.",
+    "Sign in to your Digvijaya Yatra Booker account to manage your appointments, availability, and client bookings. Secure authentication for professionals.",
   keywords: [
     "login",
     "sign in",
@@ -18,9 +18,9 @@ export const metadata: Metadata = {
     follow: false,
   },
   openGraph: {
-    title: "Sign In - Scheduler Booker",
+    title: "Sign In - Digvijaya Yatra Booker",
     description:
-      "Sign in to your Scheduler Booker account to manage your appointments, availability, and client bookings.",
+      "Sign in to your Digvijaya Yatra Booker account to manage your appointments, availability, and client bookings.",
     url: "https://scheduler-booker.vercel.app/login",
   },
   alternates: {

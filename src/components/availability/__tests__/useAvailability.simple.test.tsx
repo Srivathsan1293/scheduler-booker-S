@@ -160,8 +160,14 @@ describe("useAvailability", () => {
       });
     });
 
-    const dateKey = testDate.toISOString().split("T")[0];
+    const dateKey = TimeSlotUtils.formatDateKey(testDate);
     expect(result.current.availability[dateKey]?.isWorkingDay).toBe(false);
+  });
+
+  it("uses the local calendar day when formatting availability keys", () => {
+    const testDate = new Date(2024, 0, 15);
+
+    expect(TimeSlotUtils.formatDateKey(testDate)).toBe("2024-01-15");
   });
 
   it("toggles working day status", () => {
@@ -176,7 +182,7 @@ describe("useAvailability", () => {
       });
     });
 
-    const dateKey = testDate.toISOString().split("T")[0];
+    const dateKey = TimeSlotUtils.formatDateKey(testDate);
     expect(result.current.availability[dateKey]?.isWorkingDay).toBe(true);
 
     // Note: The actual toggleWorkingDay is mocked, so we're testing the updateDayAvailability functionality
@@ -209,7 +215,7 @@ describe("useAvailability", () => {
       });
     });
 
-    const dateKey = testDate.toISOString().split("T")[0];
+    const dateKey = TimeSlotUtils.formatDateKey(testDate);
     expect(
       result.current.availability[dateKey]?.timeSlots[0]?.isAvailable
     ).toBe(true);
@@ -241,7 +247,7 @@ describe("useAvailability", () => {
     });
 
     // Verify data exists
-    const dateKey = testDate.toISOString().split("T")[0];
+    const dateKey = TimeSlotUtils.formatDateKey(testDate);
     expect(result.current.availability[dateKey]).toBeDefined();
 
     // Refresh calendar

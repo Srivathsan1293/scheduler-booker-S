@@ -3,7 +3,7 @@ import type { Metadata } from "next";
 export const metadata: Metadata = {
   title: "Terms of Service",
   description:
-    "Terms of Service for Scheduler Booker - Intelligent appointment scheduling platform",
+    "Terms of Service for Digvijaya Yatra Booker - Intelligent appointment scheduling platform",
 };
 
 export default function TermsPage() {
@@ -25,7 +25,7 @@ export default function TermsPage() {
                 1. Acceptance of Terms
               </h2>
               <p className="text-gray-700 mb-4">
-                By accessing and using Scheduler Booker (&quot;the
+                By accessing and using Digvijaya Yatra Booker (&quot;the
                 Service&quot;), you accept and agree to be bound by the terms
                 and provision of this agreement. If you do not agree to abide by
                 the above, please do not use this service.
@@ -37,7 +37,7 @@ export default function TermsPage() {
                 2. Description of Service
               </h2>
               <p className="text-gray-700 mb-4">
-                Scheduler Booker is an intelligent appointment scheduling and
+                Digvijaya Yatra Booker is an intelligent appointment scheduling and
                 booking platform that allows users to:
               </p>
               <ul className="list-disc pl-6 text-gray-700 mb-4">
@@ -135,7 +135,7 @@ export default function TermsPage() {
               </h2>
               <p className="text-gray-700 mb-4">
                 The Service and its original content, features, and
-                functionality are owned by Scheduler Booker and are protected by
+                functionality are owned by Digvijaya Yatra Booker and are protected by
                 international copyright, trademark, and other intellectual
                 property laws.
               </p>
@@ -173,7 +173,7 @@ export default function TermsPage() {
                 11. Limitation of Liability
               </h2>
               <p className="text-gray-700 mb-4">
-                IN NO EVENT SHALL SCHEDULER BOOKER BE LIABLE FOR ANY INDIRECT,
+                IN NO EVENT SHALL Digvijaya Yatra Booker BE LIABLE FOR ANY INDIRECT,
                 INCIDENTAL, SPECIAL, CONSEQUENTIAL, OR PUNITIVE DAMAGES,
                 INCLUDING WITHOUT LIMITATION, LOSS OF PROFITS, DATA, USE,
                 GOODWILL, OR OTHER INTANGIBLE LOSSES.
@@ -215,7 +215,7 @@ export default function TermsPage() {
               </h2>
               <p className="text-gray-700 mb-4">
                 These Terms shall be interpreted and governed by the laws of the
-                jurisdiction in which Scheduler Booker operates, without regard
+                jurisdiction in which Digvijaya Yatra Booker operates, without regard
                 to conflict of law provisions.
               </p>
             </section>

@@ -6,6 +6,12 @@ import {
 } from "@/lib/utils/serverTimeFormat";
 import * as Sentry from "@sentry/nextjs";
 
+function getSlotDurationMinutes(startTime: string, endTime: string) {
+  const [startHour, startMinute] = startTime.split(":").map(Number);
+  const [endHour, endMinute] = endTime.split(":").map(Number);
+  return endHour * 60 + endMinute - (startHour * 60 + startMinute);
+}
+
 export async function GET(request: NextRequest) {
   const { searchParams } = new URL(request.url);
   const date = searchParams.get("date");
@@ -24,11 +30,12 @@ export async function GET(request: NextRequest) {
     // Fetch user's time format preference
     const { data: userSettings } = await supabase
       .from("user_availability_settings")
-      .select("time_format_12h")
+      .select("time_format_12h, slot_duration_minutes")
       .eq("user_id", userId)
       .single();
 
     const shouldUse12HourFormat = userSettings?.time_format_12h || false;
+    const slotDuration = userSettings?.slot_duration_minutes === 480 ? 480 : 240;
 
     // Get working hours for the day
     // Note: getDay() returns 0-6 (Sunday-Saturday), and our database uses 0-6 (Sunday-Saturday)
@@ -98,32 +105,51 @@ export async function GET(request: NextRequest) {
           endTimeDisplay?: string;
           isAvailable: boolean;
           isBooked: boolean;
-        }> = customTimeSlots.map((customSlot) => {
-          const startTime = extractTimeFromTimestamp(customSlot.start_time);
-          const endTime = extractTimeFromTimestamp(customSlot.end_time);
-          const slot = {
-            id: `${userId}-${date}-${startTime}-${endTime}`,
-            startTime,
-            endTime,
-            isAvailable:
-              customSlot.is_available !== false && !customSlot.is_booked,
-            isBooked: customSlot.is_booked || false,
-          } as {
-            id: string;
-            startTime: string;
-            endTime: string;
-            startTimeDisplay?: string;
-            endTimeDisplay?: string;
-            isAvailable: boolean;
-            isBooked: boolean;
-          };
+        }> = customTimeSlots
+          .map((customSlot) => {
+            const startTime = extractTimeFromTimestamp(customSlot.start_time);
+            const endTime = extractTimeFromTimestamp(customSlot.end_time);
 
-          if (shouldUse12HourFormat) {
-            slot.startTimeDisplay = formatTime(startTime, false);
-            slot.endTimeDisplay = formatTime(endTime, false);
-          }
-          return slot;
-        });
+            if (getSlotDurationMinutes(startTime, endTime) !== slotDuration) {
+              return null;
+            }
+
+            const slot = {
+              id: `${userId}-${date}-${startTime}-${endTime}`,
+              startTime,
+              endTime,
+              isAvailable:
+                customSlot.is_available !== false && !customSlot.is_booked,
+              isBooked: customSlot.is_booked || false,
+            } as {
+              id: string;
+              startTime: string;
+              endTime: string;
+              startTimeDisplay?: string;
+              endTimeDisplay?: string;
+              isAvailable: boolean;
+              isBooked: boolean;
+            };
+
+            if (shouldUse12HourFormat) {
+              slot.startTimeDisplay = formatTime(startTime, false);
+              slot.endTimeDisplay = formatTime(endTime, false);
+            }
+            return slot;
+          })
+          .filter(
+            (
+              slot
+            ): slot is {
+              id: string;
+              startTime: string;
+              endTime: string;
+              startTimeDisplay?: string;
+              endTimeDisplay?: string;
+              isAvailable: boolean;
+              isBooked: boolean;
+            } => slot !== null
+          );
 
         // Check for existing bookings and mark slots as unavailable
         const { data: existingBookings } = await supabase
@@ -172,17 +198,6 @@ export async function GET(request: NextRequest) {
         message: "No working hours or custom slots configured for this day",
       });
     }
-
-    // Get availability settings
-    const { data: settings } = await supabase
-      .from("user_availability_settings")
-      .select("slot_duration_minutes")
-      .eq("user_id", userId)
-      .single();
-
-    // If no settings found, use default 60-minute slots
-    // If there's an error, also use default (don't fail the request)
-    const slotDuration = settings?.slot_duration_minutes || 60;
 
     // Generate time slots
     const timeSlots: Array<{
@@ -239,6 +254,10 @@ export async function GET(request: NextRequest) {
       customTimeSlots.forEach((customSlot) => {
         const startTime = extractTimeFromTimestamp(customSlot.start_time);
         const endTime = extractTimeFromTimestamp(customSlot.end_time);
+
+        if (getSlotDurationMinutes(startTime, endTime) !== slotDuration) {
+          return;
+        }
 
         const existingIndex = timeSlots.findIndex(
           (s) => s.startTime === startTime && s.endTime === endTime

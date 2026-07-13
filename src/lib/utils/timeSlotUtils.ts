@@ -4,6 +4,7 @@ import type {
   AvailabilitySettings,
   DayAvailability,
 } from "../types/availability";
+import { format } from "date-fns";
 import { extractTimeFromTimestamp } from "./serverTimeFormat";
 import { formatTime } from "./clientTimeFormat";
 
@@ -95,7 +96,7 @@ export class TimeSlotUtils {
    * Formats date to ISO date string (YYYY-MM-DD)
    */
   static formatDateKey(date: Date): string {
-    return date.toISOString().split("T")[0];
+    return format(date, "yyyy-MM-dd");
   }
 
   /**

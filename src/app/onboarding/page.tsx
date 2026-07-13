@@ -6,7 +6,7 @@ import { createSupabaseServerClient } from "@/lib/supabase-server";
 export const metadata: Metadata = {
   title: "Complete Your Profile - Set Up Your Scheduling Business",
   description:
-    "Finish setting up your Scheduler Booker account. Configure your business details, working hours, and preferences to start accepting client bookings.",
+    "Finish setting up your Digvijaya Yatra Booker account. Configure your business details, working hours, and preferences to start accepting client bookings.",
   keywords: [
     "onboarding",
     "profile setup",
@@ -20,9 +20,9 @@ export const metadata: Metadata = {
     follow: false,
   },
   openGraph: {
-    title: "Complete Your Profile - Scheduler Booker",
+    title: "Complete Your Profile - Digvijaya Yatra Booker",
     description:
-      "Finish setting up your Scheduler Booker account. Configure your business details, working hours, and preferences to start accepting client bookings.",
+      "Finish setting up your Digvijaya Yatra Booker account. Configure your business details, working hours, and preferences to start accepting client bookings.",
     url: "https://scheduler-booker.vercel.app/onboarding",
   },
   alternates: {

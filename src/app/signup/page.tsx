@@ -5,7 +5,7 @@ import { UserPlusIcon } from "@heroicons/react/24/outline";
 export const metadata: Metadata = {
   title: "Create Account - Start Your Professional Scheduling Journey",
   description:
-    "Join thousands of professionals using Scheduler Booker to streamline their appointment scheduling. Create your account and start managing availability in minutes.",
+    "Join thousands of professionals using Digvijaya Yatra Booker to streamline their appointment scheduling. Create your account and start managing availability in minutes.",
   keywords: [
     "sign up",
     "create account",
@@ -16,9 +16,9 @@ export const metadata: Metadata = {
     "business scheduling tool",
   ],
   openGraph: {
-    title: "Create Account - Scheduler Booker",
+    title: "Create Account - Digvijaya Yatra Booker",
     description:
-      "Join thousands of professionals using Scheduler Booker to streamline their appointment scheduling. Create your account and start managing availability in minutes.",
+      "Join thousands of professionals using Digvijaya Yatra Booker to streamline their appointment scheduling. Create your account and start managing availability in minutes.",
     url: "https://scheduler-booker.vercel.app/signup",
   },
   alternates: {

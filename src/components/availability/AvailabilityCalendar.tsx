@@ -27,6 +27,7 @@ import {
 } from "@heroicons/react/24/outline";
 import { useAvailability } from "@/lib/hooks/useAvailability";
 import type { TimeSlot, Booking } from "@/lib/types/availability";
+import { TimeSlotUtils } from "@/lib/utils/timeSlotUtils";
 
 import DayDetailsModal from "./DayDetailsModal";
 import SettingsModal from "./SettingsModal";
@@ -46,6 +47,10 @@ export default function AvailabilityCalendar({}: AvailabilityCalendarProps) {
     workingHours,
     settings,
     isFullyLoaded,
+    updateWorkingHours,
+    updateSettings,
+    saveAvailability,
+    isLoading,
     toggleWorkingDay,
     toggleTimeSlot,
     setAvailability,
@@ -108,7 +113,7 @@ export default function AvailabilityCalendar({}: AvailabilityCalendarProps) {
   // Helper function to get booking information for a specific day
   const getDayBookings = useCallback(
     (day: Date) => {
-      const dateKey = format(day, "yyyy-MM-dd");
+      const dateKey = TimeSlotUtils.formatDateKey(day);
       return bookings[dateKey] || [];
     },
     [bookings]
@@ -202,6 +207,7 @@ export default function AvailabilityCalendar({}: AvailabilityCalendarProps) {
     loadAndSetBookings,
     processMonthDays,
     markTimeSlotsLoaded,
+    settings,
   ]);
 
   // Reset processed month when data changes (so calendar reprocesses with new data)
@@ -478,8 +484,7 @@ export default function AvailabilityCalendar({}: AvailabilityCalendarProps) {
                     : isSameMonth(day, currentMonth)
                 )
                 .map((day) => {
-                  const dateKeyLocal = format(day, "yyyy-MM-dd");
-                  const dateKeyIso = day.toISOString().split("T")[0];
+                  const dateKey = TimeSlotUtils.formatDateKey(day);
 
                   // Get the default working day status from working hours
                   const dayOfWeek = day.getDay();
@@ -487,8 +492,7 @@ export default function AvailabilityCalendar({}: AvailabilityCalendarProps) {
                   const dayHours = workingHours[dayIndex];
 
                   // Try multiple date key formats to find the data
-                  const dayAvailability = availability[dateKeyLocal] ||
-                    availability[dateKeyIso] ||
+                  const dayAvailability = availability[dateKey] ||
                     availability[day.toISOString()] ||
                     availability[day.toLocaleDateString()] || {
                       date: day,
@@ -507,7 +511,7 @@ export default function AvailabilityCalendar({}: AvailabilityCalendarProps) {
 
                   return (
                     <div
-                      key={day.toISOString()}
+                      key={dateKey}
                       className={`p-4 rounded-lg border transition-all duration-200 ${
                         isCurrentMonth
                           ? "bg-white border-gray-200"
@@ -720,8 +724,7 @@ export default function AvailabilityCalendar({}: AvailabilityCalendarProps) {
             {/* Desktop: 7-column grid layout */}
             <div className="hidden sm:grid sm:grid-cols-7">
               {calendarDays.map((day) => {
-                const dateKeyLocal = format(day, "yyyy-MM-dd");
-                const dateKeyIso = day.toISOString().split("T")[0];
+                const dateKey = TimeSlotUtils.formatDateKey(day);
 
                 // Get the default working day status from working hours
                 const dayOfWeek = day.getDay();
@@ -729,8 +732,7 @@ export default function AvailabilityCalendar({}: AvailabilityCalendarProps) {
                 const dayHours = workingHours[dayIndex];
 
                 // Try multiple date key formats to find the data
-                const dayAvailability = availability[dateKeyLocal] ||
-                  availability[dateKeyIso] ||
+                const dayAvailability = availability[dateKey] ||
                   availability[day.toISOString()] ||
                   availability[day.toLocaleDateString()] || {
                     date: day,
@@ -748,7 +750,7 @@ export default function AvailabilityCalendar({}: AvailabilityCalendarProps) {
 
                 return (
                   <div
-                    key={day.toISOString()}
+                    key={dateKey}
                     className={`min-h-[100px] sm:min-h-[140px] lg:min-h-[160px] border-r border-b border-gray-100 ${
                       isCurrentMonth ? "bg-white" : "bg-gray-50"
                     } ${
@@ -1009,6 +1011,12 @@ export default function AvailabilityCalendar({}: AvailabilityCalendarProps) {
       <SettingsModal
         isOpen={showSettingsModal}
         onClose={() => setShowSettingsModal(false)}
+        workingHours={workingHours}
+        settings={settings}
+        updateWorkingHours={updateWorkingHours}
+        updateSettings={updateSettings}
+        saveAvailability={saveAvailability}
+        isLoading={isLoading}
       />
     </div>
   );

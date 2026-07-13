@@ -19,7 +19,7 @@ const availabilitySchema = z.object({
   workDays: z.array(z.string()).min(1, "Please select at least one work day"),
   startTime: z.string().min(1, "Please select a start time"),
   endTime: z.string().min(1, "Please select an end time"),
-  timeSlotDuration: z.number().min(15).max(120),
+  timeSlotDuration: z.union([z.literal(240), z.literal(480)]),
   timeFormat12h: z.boolean(),
 });
 
@@ -62,7 +62,7 @@ export default function OnboardingForm() {
     resolver: zodResolver(availabilitySchema),
     defaultValues: {
       workDays: ["monday", "tuesday", "wednesday", "thursday", "friday"],
-      timeSlotDuration: 30,
+      timeSlotDuration: 240,
       timeFormat12h: true, // Default to 12-hour format
     },
   });
@@ -118,7 +118,7 @@ export default function OnboardingForm() {
         <div className="mb-8">
           <h2 className="text-3xl font-bold text-gray-900 text-center mb-2">
             <span className="bg-gradient-to-r from-blue-600 to-indigo-600 bg-clip-text text-transparent">
-              Welcome to Scheduler Booker!
+              Welcome to Digvijaya Yatra Booker!
             </span>
           </h2>
           <p className="text-gray-700 text-center">
@@ -429,12 +429,8 @@ export default function OnboardingForm() {
             id="timeSlotDuration"
                   className="w-full px-3 py-2 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-gray-900 shadow-sm"
           >
-            <option value={15}>15 minutes</option>
-            <option value={30}>30 minutes</option>
-            <option value={45}>45 minutes</option>
-            <option value={60}>1 hour</option>
-            <option value={90}>1.5 hours</option>
-            <option value={120}>2 hours</option>
+            <option value={240}>4 hours</option>
+            <option value={480}>8 hours</option>
           </select>
         </div>
 

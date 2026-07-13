@@ -49,8 +49,7 @@ export class AvailabilityService {
   static async createDefaultSettings(userId: string) {
     const defaultSettings = {
       user_id: userId,
-      slot_duration_minutes: 60,
-      break_duration_minutes: 15,
+      slot_duration_minutes: 240,
       advance_booking_days: 30,
     };
 

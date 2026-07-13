@@ -60,6 +60,13 @@ export async function POST(request: Request) {
       );
     }
 
+    if (![240, 480].includes(settings.slot_duration_minutes)) {
+      return NextResponse.json(
+        { error: "Invalid slot duration" },
+        { status: 400 }
+      );
+    }
+
     // Check if settings already exist for this user
     const { data: existingSettings } = await supabase
       .from("user_availability_settings")
@@ -67,15 +74,16 @@ export async function POST(request: Request) {
       .eq("user_id", user.id)
       .single();
 
+    const nextSettings = {
+      slot_duration_minutes: settings.slot_duration_minutes,
+      advance_booking_days: settings.advance_booking_days,
+    };
+
     if (existingSettings) {
       // Update existing settings
       const { error: updateError } = await supabase
         .from("user_availability_settings")
-        .update({
-          slot_duration_minutes: settings.slot_duration_minutes,
-          break_duration_minutes: settings.break_duration_minutes,
-          advance_booking_days: settings.advance_booking_days,
-        })
+        .update(nextSettings)
         .eq("user_id", user.id);
 
       if (updateError) {
@@ -87,9 +95,7 @@ export async function POST(request: Request) {
         .from("user_availability_settings")
         .insert({
           user_id: user.id,
-          slot_duration_minutes: settings.slot_duration_minutes,
-          break_duration_minutes: settings.break_duration_minutes,
-          advance_booking_days: settings.advance_booking_days,
+          ...nextSettings,
         });
 
       if (insertError) {

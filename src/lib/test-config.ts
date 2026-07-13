@@ -15,7 +15,7 @@ export const TEST_CONFIG = {
     workDays: ["monday", "tuesday", "wednesday", "thursday", "friday"],
     startTime: "09:00",
     endTime: "17:00",
-    timeSlotDuration: 30,
+    timeSlotDuration: 240,
   },
   supabase: {
     url: process.env.NEXT_PUBLIC_SUPABASE_URL,
