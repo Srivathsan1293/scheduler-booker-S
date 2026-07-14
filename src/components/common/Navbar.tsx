@@ -7,9 +7,10 @@ import { CalendarDaysIcon } from "@heroicons/react/24/outline";
 
 interface NavbarProps {
   isAuthed: boolean;
+  isSuperAdmin: boolean;
 }
 
-export default function Navbar({ isAuthed }: NavbarProps) {
+export default function Navbar({ isAuthed, isSuperAdmin }: NavbarProps) {
   const pathname = usePathname();
 
   const isAuthRoute =
@@ -55,6 +56,18 @@ export default function Navbar({ isAuthed }: NavbarProps) {
                 >
                   Availability
                 </Link>
+                {isSuperAdmin ? (
+                  <Link
+                    href="/dashboard/users"
+                    className={`text-sm px-4 py-2 rounded-lg transition-all duration-200 ${
+                      pathname === "/dashboard/users"
+                        ? "bg-blue-50 text-blue-700 font-medium ring-1 ring-blue-200"
+                        : "text-gray-600 hover:text-gray-900 hover:bg-gray-50 ring-1 ring-transparent hover:ring-gray-200"
+                    }`}
+                  >
+                    Users
+                  </Link>
+                ) : null}
               </div>
             )}
           </div>

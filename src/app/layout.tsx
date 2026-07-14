@@ -3,7 +3,7 @@ import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import Navbar from "@/components/common/Navbar";
 import { SnackbarProvider } from "@/components/snackbar";
-import { createSupabaseServerClient } from "@/lib/supabase-server";
+import { getCurrentUserProfile, isSuperAdmin } from "@/lib/auth/roles";
 import QueryProvider from "@/lib/providers/QueryProvider";
 
 const geistSans = Geist({
@@ -100,16 +100,16 @@ export default async function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  // Check auth on server side - only pass boolean to client
-  // Use getSession() which checks locally without API call
   let isAuthed = false;
+  let isAdmin = false;
   try {
-    const supabase = await createSupabaseServerClient();
-    const { data } = await supabase.auth.getSession();
-    isAuthed = !!data.session;
+    const { user, profile } = await getCurrentUserProfile();
+    isAuthed = !!user;
+    isAdmin = !!profile && isSuperAdmin(profile.role);
   } catch {
     // Invalid tokens - treat as not authenticated
     isAuthed = false;
+    isAdmin = false;
   }
 
   return (
@@ -188,7 +188,7 @@ export default async function RootLayout({
       >
         <QueryProvider>
           <SnackbarProvider>
-            <Navbar isAuthed={isAuthed} />
+            <Navbar isAuthed={isAuthed} isSuperAdmin={isAdmin} />
             {children}
           </SnackbarProvider>
         </QueryProvider>

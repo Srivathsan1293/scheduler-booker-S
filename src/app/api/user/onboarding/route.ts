@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { createSupabaseServerClient } from "@/lib/supabase-server";
+import { upsertUserProfile } from "@/lib/auth/user-management";
 import * as Sentry from "@sentry/nextjs";
 
 export async function POST(request: NextRequest) {
@@ -129,6 +130,15 @@ export async function POST(request: NextRequest) {
 
     if (metadataError) {
       throw metadataError;
+    }
+
+    if (user.email) {
+      await upsertUserProfile({
+        userId: user.id,
+        email: user.email,
+        displayName: name,
+        onboarded: true,
+      });
     }
 
     return NextResponse.json({ success: true });

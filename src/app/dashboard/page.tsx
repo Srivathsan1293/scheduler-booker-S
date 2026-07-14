@@ -7,8 +7,9 @@ import {
   ArrowRightIcon,
   UsersIcon,
   CheckCircleIcon,
+  ShieldCheckIcon,
 } from "@heroicons/react/24/outline";
-import { createSupabaseServerClient } from "@/lib/supabase-server";
+import { requireAuthenticatedProfile, isSuperAdmin } from "@/lib/auth/roles";
 import ShareBookingButton from "@/components/dashboard/ShareBookingButton";
 import Breadcrumbs from "@/components/ui/Breadcrumbs";
 
@@ -41,28 +42,8 @@ export const metadata: Metadata = {
 };
 
 export default async function DashboardPage() {
-  const supabase = await createSupabaseServerClient();
-
-  // Get user on server side
-  const {
-    data: { user },
-    error: userError,
-  } = await supabase.auth.getUser();
-
-  console.log("🔍 Dashboard: User check:", {
-    hasUser: !!user,
-    userId: user?.id,
-    hasError: !!userError,
-    timestamp: new Date().toISOString(),
-    path: "/dashboard",
-  });
-
-  if (userError || !user) {
-    console.log("🔍 Dashboard: No user, redirecting to login");
-    redirect("/login");
-  }
-
-  console.log("🔍 Dashboard: User authenticated, showing dashboard");
+  const { user, profile } = await requireAuthenticatedProfile();
+  const showAdminCard = isSuperAdmin(profile.role);
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-200">
@@ -94,7 +75,7 @@ export default async function DashboardPage() {
         </div>
 
         {/* Quick actions */}
-        <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-4">
+        <div className={`grid grid-cols-1 gap-6 md:grid-cols-2 ${showAdminCard ? "lg:grid-cols-5" : "lg:grid-cols-4"}`}>
           <Link
             href="/dashboard/availability"
             className="group relative overflow-hidden rounded-2xl border border-blue-200 bg-gradient-to-b from-blue-50 to-white p-6 shadow-sm transition-all hover:-translate-y-0.5 hover:shadow-md"
@@ -156,6 +137,28 @@ export default async function DashboardPage() {
           </Link>
 
           <ShareBookingButton userId={user.id} />
+
+          {showAdminCard ? (
+            <Link
+              href="/dashboard/users"
+              className="group relative overflow-hidden rounded-2xl border border-cyan-200 bg-gradient-to-b from-cyan-50 to-white p-6 shadow-sm transition-all hover:-translate-y-0.5 hover:shadow-md"
+            >
+              <div className="flex items-start gap-4">
+                <div className="rounded-lg bg-cyan-600/10 p-3 ring-1 ring-cyan-200">
+                  <ShieldCheckIcon className="h-6 w-6 text-cyan-700" />
+                </div>
+                <div>
+                  <h3 className="text-lg font-semibold text-gray-900">
+                    Manage Users
+                  </h3>
+                  <p className="mt-1 text-sm text-cyan-700/90">
+                    Invite volunteers and monitor roles.
+                  </p>
+                </div>
+              </div>
+              <ArrowRightIcon className="absolute right-4 top-4 h-5 w-5 text-cyan-600/60 transition-transform group-hover:translate-x-0.5" />
+            </Link>
+          ) : null}
         </div>
 
         {/* Next steps */}

@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 import { createSupabaseServerClient } from "@/lib/supabase-server";
+import { upsertUserProfile } from "@/lib/auth/user-management";
 import * as Sentry from "@sentry/nextjs";
 
 export async function POST(request: Request) {
@@ -67,6 +68,19 @@ export async function POST(request: Request) {
         { error: userFriendlyMessage },
         { status: statusCode },
       );
+    }
+
+    if (data.user?.id && data.user.email) {
+      await upsertUserProfile({
+        userId: data.user.id,
+        email: data.user.email,
+        displayName:
+          data.user.user_metadata?.display_name ??
+          data.user.user_metadata?.name ??
+          null,
+        onboarded: false,
+        role: "volunteer",
+      });
     }
 
     return NextResponse.json({
