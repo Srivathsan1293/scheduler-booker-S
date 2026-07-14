@@ -508,19 +508,29 @@ export default function AvailabilityCalendar({}: AvailabilityCalendarProps) {
                     process.env.NODE_ENV === "test"
                       ? false
                       : isBefore(day, startOfDay(new Date()));
+                  const hasAvailableSlots =
+                    dayAvailability.isWorkingDay &&
+                    isDateInAllowedRange(day) &&
+                    dayAvailability.timeSlots.some(
+                      (slot: TimeSlot) => slot.isAvailable && !slot.isBooked
+                    );
 
                   return (
                     <div
                       key={dateKey}
                       className={`p-4 rounded-lg border transition-all duration-200 ${
                         isCurrentMonth
-                          ? "bg-white border-gray-200"
+                          ? hasAvailableSlots
+                            ? "bg-green-50 border-green-200"
+                            : "bg-white border-gray-200"
                           : "bg-gray-50 border-gray-100"
                       } ${
                         isSelected ? "ring-2 ring-blue-500 ring-inset" : ""
                       } ${
                         isPastDay
                           ? "bg-gray-100 opacity-50 cursor-not-allowed"
+                          : hasAvailableSlots
+                          ? "hover:bg-green-100 cursor-pointer active:bg-green-100"
                           : "hover:bg-gray-50 cursor-pointer active:bg-gray-100"
                       }`}
                       onClick={() => {
@@ -747,17 +757,29 @@ export default function AvailabilityCalendar({}: AvailabilityCalendarProps) {
                   process.env.NODE_ENV === "test"
                     ? false
                     : isBefore(day, startOfDay(new Date()));
+                const hasAvailableSlots =
+                  dayAvailability.isWorkingDay &&
+                  isDateInAllowedRange(day) &&
+                  dayAvailability.timeSlots.some(
+                    (slot: TimeSlot) => slot.isAvailable && !slot.isBooked
+                  );
 
                 return (
                   <div
                     key={dateKey}
                     className={`min-h-[100px] sm:min-h-[140px] lg:min-h-[160px] border-r border-b border-gray-100 ${
-                      isCurrentMonth ? "bg-white" : "bg-gray-50"
+                      isCurrentMonth
+                        ? hasAvailableSlots
+                          ? "bg-green-50"
+                          : "bg-white"
+                        : "bg-gray-50"
                     } ${
                       isSelected ? "ring-2 ring-blue-500 ring-inset" : ""
                     } transition-all duration-200 ${
                       isPastDay
                         ? "bg-gray-100 opacity-50 cursor-not-allowed"
+                        : hasAvailableSlots
+                        ? "hover:bg-green-100 cursor-pointer active:bg-green-100"
                         : "hover:bg-gray-50 cursor-pointer active:bg-gray-100"
                     }`}
                     onClick={() => {

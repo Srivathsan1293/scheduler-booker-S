@@ -1,6 +1,5 @@
 "use client";
 
-import { useState, useEffect } from "react";
 import { format, addDays, startOfDay, isBefore } from "date-fns";
 import { CalendarDaysIcon, ClockIcon } from "@heroicons/react/24/outline";
 
@@ -37,9 +36,11 @@ interface SharedAvailabilityCalendarProps {
   onTimeSlotSelect: (slot: TimeSlot) => void;
   selectedDate: Date | null;
   selectedTimeSlot: TimeSlot | null;
+  availableDates?: Date[];
   dayAvailability: DayAvailability | null;
   isLoading: boolean;
   showBookingDetails?: boolean; // Control whether to show booking information
+  noAvailableDatesMessage?: string;
 }
 
 export default function SharedAvailabilityCalendar({
@@ -47,24 +48,18 @@ export default function SharedAvailabilityCalendar({
   onTimeSlotSelect,
   selectedDate,
   selectedTimeSlot,
+  availableDates,
   dayAvailability,
   isLoading,
   showBookingDetails = false,
+  noAvailableDatesMessage = "No available dates right now.",
 }: SharedAvailabilityCalendarProps) {
-  const [availableDates, setAvailableDates] = useState<Date[]>([]);
-
-  // Generate available dates (next 30 days)
-  useEffect(() => {
-    const dates: Date[] = [];
-    const today = startOfDay(new Date());
-
-    for (let i = 0; i < 30; i++) {
-      const date = addDays(today, i);
-      dates.push(date);
-    }
-
-    setAvailableDates(dates);
-  }, []);
+  const hasAvailableDatesProp = availableDates !== undefined;
+  const dateOptions = hasAvailableDatesProp
+    ? availableDates
+    : Array.from({ length: 30 }, (_, index) =>
+        addDays(startOfDay(new Date()), index)
+      );
 
   const handleDateSelect = (date: Date) => {
     onDateSelect(date);
@@ -88,32 +83,38 @@ export default function SharedAvailabilityCalendar({
           <CalendarDaysIcon className="h-5 w-5 text-blue-600" />
           Select Date
         </h3>
-        <div className="grid grid-cols-7 gap-2 sm:gap-3">
-          {availableDates.map((date) => (
-            <button
-              key={date.toISOString()}
-              onClick={() => handleDateSelect(date)}
-              disabled={isDateDisabled(date)}
-              className={`
-                p-3 text-sm font-medium rounded-lg transition-all
-                ${
-                  selectedDate &&
-                  format(selectedDate, "yyyy-MM-dd") ===
-                    format(date, "yyyy-MM-dd")
-                    ? "bg-blue-600 text-white shadow-lg"
-                    : isDateDisabled(date)
-                    ? "bg-gray-100 text-gray-400 cursor-not-allowed"
-                    : "bg-white text-gray-700 hover:bg-blue-50 hover:border-blue-200 border border-gray-200"
-                }
-              `}
-            >
-              <div className="text-xs text-gray-500 mb-1">
-                {format(date, "EEE")}
-              </div>
-              <div className="text-lg">{format(date, "d")}</div>
-            </button>
-          ))}
-        </div>
+        {hasAvailableDatesProp && dateOptions.length === 0 ? (
+          <div className="rounded-lg border border-dashed border-gray-300 bg-gray-50 px-4 py-6 text-center text-sm text-gray-600">
+            {noAvailableDatesMessage}
+          </div>
+        ) : (
+          <div className="grid grid-cols-7 gap-2 sm:gap-3">
+            {dateOptions.map((date) => (
+              <button
+                key={date.toISOString()}
+                onClick={() => handleDateSelect(date)}
+                disabled={isDateDisabled(date)}
+                className={`
+                  p-3 text-sm font-medium rounded-lg transition-all
+                  ${
+                    selectedDate &&
+                    format(selectedDate, "yyyy-MM-dd") ===
+                      format(date, "yyyy-MM-dd")
+                      ? "bg-blue-600 text-white shadow-lg"
+                      : isDateDisabled(date)
+                      ? "bg-gray-100 text-gray-400 cursor-not-allowed"
+                      : "bg-white text-gray-700 hover:bg-blue-50 hover:border-blue-200 border border-gray-200"
+                  }
+                `}
+              >
+                <div className="text-xs text-gray-500 mb-1">
+                  {format(date, "EEE")}
+                </div>
+                <div className="text-lg">{format(date, "d")}</div>
+              </button>
+            ))}
+          </div>
+        )}
       </div>
 
       {/* Time Slot Selection */}

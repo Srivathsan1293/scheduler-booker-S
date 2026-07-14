@@ -1,13 +1,14 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { format } from "date-fns";
+import { addDays, format, parseISO, startOfDay } from "date-fns";
 import { UserIcon } from "@heroicons/react/24/outline";
 import { useSnackbar } from "@/components/snackbar";
 import {
+  usePublicAvailableDates,
   usePublicDayAvailability,
   useCreatePublicBooking,
 } from "@/lib/hooks/queries";
@@ -33,11 +34,35 @@ interface PublicBookingFormProps {
 
 export default function PublicBookingForm({ userId }: PublicBookingFormProps) {
   const router = useRouter();
-  const [selectedDate, setSelectedDate] = useState<Date>(new Date());
+  const today = startOfDay(new Date());
+  const rangeStart = format(today, "yyyy-MM-dd");
+  const rangeEnd = format(addDays(today, 29), "yyyy-MM-dd");
+  const [selectedDate, setSelectedDate] = useState<Date>(today);
   const [selectedTimeSlot, setSelectedTimeSlot] = useState<TimeSlot | null>(
     null
   );
   const { success, error, warning } = useSnackbar();
+
+  const { data: availableDatesResponse, isLoading: isAvailableDatesLoading } =
+    usePublicAvailableDates(userId, rangeStart, rangeEnd);
+
+  const availableDateKeys = availableDatesResponse?.availableDates ?? [];
+  const availableDates = availableDateKeys.map((date) => parseISO(date));
+
+  useEffect(() => {
+    if (availableDateKeys.length === 0) {
+      return;
+    }
+
+    const selectedDateKey = format(selectedDate, "yyyy-MM-dd");
+
+    if (availableDateKeys.includes(selectedDateKey)) {
+      return;
+    }
+
+    setSelectedDate(availableDates[0]);
+    setSelectedTimeSlot(null);
+  }, [availableDateKeys, availableDates, selectedDate]);
 
   // Use TanStack Query for public day availability
   const dateString = format(selectedDate, "yyyy-MM-dd");
@@ -117,11 +142,13 @@ export default function PublicBookingForm({ userId }: PublicBookingFormProps) {
         onTimeSlotSelect={handleTimeSlotSelect}
         selectedDate={selectedDate}
         selectedTimeSlot={selectedTimeSlot}
+        availableDates={availableDates}
         dayAvailability={
           dayAvailability ? { ...dayAvailability, date: selectedDate } : null
         }
-        isLoading={isLoading}
+        isLoading={isLoading || isAvailableDatesLoading}
         showBookingDetails={false}
+        noAvailableDatesMessage="No time slots are currently available. Please check back later."
       />
 
       {/* Booking Form */}

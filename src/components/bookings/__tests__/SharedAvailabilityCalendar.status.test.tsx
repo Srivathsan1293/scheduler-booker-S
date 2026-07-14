@@ -65,4 +65,35 @@ describe("SharedAvailabilityCalendar status badges", () => {
     expect(screen.getByText("✓ Confirmed")).toBeInTheDocument();
     expect(screen.getByText("✕ Cancelled")).toBeInTheDocument();
   });
+
+  it("renders only provided available dates", () => {
+    render(
+      <SharedAvailabilityCalendar
+        {...baseProps}
+        availableDates={[new Date("2024-01-02"), new Date("2024-01-05")]}
+        dayAvailability={{
+          date: new Date("2024-01-02"),
+          isWorkingDay: true,
+          timeSlots: [],
+        }}
+      />
+    );
+
+    expect(screen.getByText("2")).toBeInTheDocument();
+    expect(screen.getByText("5")).toBeInTheDocument();
+    expect(screen.queryByText("1")).not.toBeInTheDocument();
+  });
+
+  it("shows an empty-state message when no dates are available", () => {
+    render(
+      <SharedAvailabilityCalendar
+        {...baseProps}
+        availableDates={[]}
+        noAvailableDatesMessage="No slots available"
+        dayAvailability={null}
+      />
+    );
+
+    expect(screen.getByText("No slots available")).toBeInTheDocument();
+  });
 });

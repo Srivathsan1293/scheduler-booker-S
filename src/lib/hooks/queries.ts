@@ -82,6 +82,10 @@ interface Exception {
   reason?: string;
 }
 
+interface PublicAvailableDatesResponse {
+  availableDates: string[];
+}
+
 // Query Keys
 export const queryKeys = {
   bookings: ["bookings"] as const,
@@ -263,6 +267,33 @@ const api = {
     } catch (error) {
       Sentry.captureException(error, {
         tags: { function: "fetchPublicDayAvailability", type: "client" },
+      });
+      throw error;
+    }
+  },
+
+  async fetchPublicAvailableDates(
+    userId: string,
+    startDate: string,
+    endDate: string
+  ): Promise<PublicAvailableDatesResponse> {
+    try {
+      const response = await fetch(
+        `/api/availability/public-dates?userId=${encodeURIComponent(
+          userId
+        )}&startDate=${encodeURIComponent(
+          startDate
+        )}&endDate=${encodeURIComponent(endDate)}`
+      );
+
+      if (!response.ok) {
+        throw new Error("Failed to fetch public available dates");
+      }
+
+      return response.json();
+    } catch (error) {
+      Sentry.captureException(error, {
+        tags: { function: "fetchPublicAvailableDates", type: "client" },
       });
       throw error;
     }
@@ -759,6 +790,26 @@ export function usePublicDayAvailability(
     queryFn: () => api.fetchPublicDayAvailability(date!, userId!),
     enabled: !!date && !!userId,
     staleTime: 30 * 1000, // 30 seconds
+  });
+}
+
+export function usePublicAvailableDates(
+  userId: string | null,
+  startDate: string | null,
+  endDate: string | null
+) {
+  return useQuery({
+    queryKey: [
+      "availability",
+      "public",
+      "dates",
+      userId,
+      startDate,
+      endDate,
+    ],
+    queryFn: () => api.fetchPublicAvailableDates(userId!, startDate!, endDate!),
+    enabled: !!userId && !!startDate && !!endDate,
+    staleTime: 30 * 1000,
   });
 }
 
