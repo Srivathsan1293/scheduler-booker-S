@@ -95,10 +95,13 @@ A modern, full-stack scheduling application built with Next.js 15, Supabase, and
    Create a `.env.local` file:
 
    ```env
+   NEXT_PUBLIC_APP_URL=https://your-domain.com
    NEXT_PUBLIC_SUPABASE_URL=your_supabase_url
    NEXT_PUBLIC_SUPABASE_ANON_KEY=your_supabase_anon_key
    SUPABASE_SERVICE_ROLE_KEY=your_supabase_service_role_key
    ```
+
+   `NEXT_PUBLIC_APP_URL` should be your real application domain. It is used for signup confirmation and volunteer invite redirect URLs, so leaving it unset can cause email links to fall back to a local or proxy origin.
 
 4. **Database Setup**
 
@@ -237,6 +240,7 @@ npm run test:coverage   # Run tests with coverage
 
 | Variable                        | Description                    | Required |
 | ------------------------------- | ------------------------------ | -------- |
+| `NEXT_PUBLIC_APP_URL`           | Public app domain for email redirects | Yes |
 | `NEXT_PUBLIC_SUPABASE_URL`      | Your Supabase project URL      | Yes      |
 | `NEXT_PUBLIC_SUPABASE_ANON_KEY` | Your Supabase anonymous key    | Yes      |
 | `SUPABASE_SERVICE_ROLE_KEY`     | Your Supabase service role key | Yes      |

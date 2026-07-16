@@ -1,5 +1,11 @@
 # Database Setup Guide
 
+## 0. Configure Your App Domain
+
+Create `.env.local` from `.env.example` and set `NEXT_PUBLIC_APP_URL` to your real deployed domain.
+
+This value is used in signup and volunteer invitation email redirects. If it is missing, email links can fall back to a local development origin.
+
 ## 1. Run the Database Migration
 
 Copy and paste the contents of `supabase-migrations.sql` into your Supabase SQL editor and run it.

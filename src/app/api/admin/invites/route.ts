@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 import { z } from "zod";
 import * as Sentry from "@sentry/nextjs";
 import { getCurrentUserProfile, isSuperAdmin } from "@/lib/auth/roles";
+import { resolveAppOrigin } from "@/lib/app-url";
 import {
   createVolunteerInvite,
   resendVolunteerInvite,
@@ -55,10 +56,7 @@ export async function POST(request: Request) {
       );
     }
 
-    const origin =
-      new URL(request.url).origin ??
-      process.env.NEXT_PUBLIC_APP_URL ??
-      "http://localhost:3000";
+    const origin = resolveAppOrigin(request.url);
     const result = await createVolunteerInvite({
       email: parsed.data.email,
       invitedBy: adminRequest.user.id,
@@ -111,10 +109,7 @@ export async function PATCH(request: Request) {
       return NextResponse.json({ success: true, invite });
     }
 
-    const origin =
-      new URL(request.url).origin ??
-      process.env.NEXT_PUBLIC_APP_URL ??
-      "http://localhost:3000";
+    const origin = resolveAppOrigin(request.url);
     const result = await resendVolunteerInvite({
       inviteId: parsed.data.inviteId,
       origin,

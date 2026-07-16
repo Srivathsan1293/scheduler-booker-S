@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { createSupabaseServerClient } from "@/lib/supabase-server";
 import { upsertUserProfile } from "@/lib/auth/user-management";
+import { resolveAppOrigin } from "@/lib/app-url";
 import * as Sentry from "@sentry/nextjs";
 
 export async function POST(request: Request) {
@@ -9,8 +10,7 @@ export async function POST(request: Request) {
   try {
     const body = await request.json();
     const { email, password } = body;
-    const url = new URL(request.url);
-    const origin = url.origin || process.env.NEXT_PUBLIC_APP_URL;
+    const origin = resolveAppOrigin(request.url);
 
     const { data, error } = await supabase.auth.signUp({
       email,

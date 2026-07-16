@@ -66,6 +66,7 @@ Without this step, nobody can access the user management screen.
 ## Operational Notes
 
 - Invite emails rely on Supabase Auth email delivery being configured correctly.
+- Set `NEXT_PUBLIC_APP_URL` to the real application domain so volunteer invite redirects do not use `localhost` or a proxy origin.
 - Existing emails with pending invites are blocked from duplicate invite creation.
 - Existing users are blocked from being invited again as volunteers.
 - The invite route currently assumes the Supabase email invite flow completes authentication before redirecting back to `/invite/volunteer`.

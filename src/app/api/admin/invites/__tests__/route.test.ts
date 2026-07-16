@@ -40,6 +40,9 @@ jest.mock("@/lib/auth/user-management", () => ({
 describe("POST /api/admin/invites", () => {
   beforeEach(() => {
     jest.clearAllMocks();
+    delete process.env.NEXT_PUBLIC_APP_URL;
+    delete process.env.APP_URL;
+    delete process.env.VERCEL_URL;
   });
 
   it("returns 401 when no authenticated user exists", async () => {
@@ -122,11 +125,45 @@ describe("POST /api/admin/invites", () => {
       invitePath: "/invite/volunteer?token=test-token",
     });
   });
+
+  it("prefers the configured app domain over the request origin", async () => {
+    process.env.NEXT_PUBLIC_APP_URL = "https://scheduler-booker.example.com";
+
+    mockGetCurrentUserProfile.mockResolvedValue({
+      user: { id: "user-1" },
+      profile: { role: "super_admin" },
+    });
+    mockIsSuperAdmin.mockReturnValue(true);
+    mockCreateVolunteerInvite.mockResolvedValue({
+      invite: {
+        id: "invite-2",
+        email: "volunteer@example.com",
+      },
+      invitePath: "/invite/volunteer?token=test-token",
+    });
+
+    const request = new Request("http://localhost:3000/api/admin/invites", {
+      method: "POST",
+      body: JSON.stringify({ email: "volunteer@example.com" }),
+      headers: { "Content-Type": "application/json" },
+    });
+
+    await route.POST(request);
+
+    expect(mockCreateVolunteerInvite).toHaveBeenCalledWith({
+      email: "volunteer@example.com",
+      invitedBy: "user-1",
+      origin: "https://scheduler-booker.example.com",
+    });
+  });
 });
 
 describe("PATCH /api/admin/invites", () => {
   beforeEach(() => {
     jest.clearAllMocks();
+    delete process.env.NEXT_PUBLIC_APP_URL;
+    delete process.env.APP_URL;
+    delete process.env.VERCEL_URL;
   });
 
   it("returns 400 for invalid invite actions", async () => {
